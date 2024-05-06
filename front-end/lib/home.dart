@@ -152,7 +152,12 @@ class _HomePageState extends State<HomePage> {
                         flex: 1,
                         child: GestureDetector(
                           onTap: () {
-                            // You can navigate to any other page here.
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => TeacherList(),
+                              ),
+                            );
                           },
                           child: Card(
                             elevation: 4.0,
@@ -186,7 +191,12 @@ class _HomePageState extends State<HomePage> {
                         flex: 1,
                         child: GestureDetector(
                           onTap: () {
-                            // You can navigate to any other page here.
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => TeacherList(),
+                              ),
+                            );
                           },
                           child: Card(
                             elevation: 4.0,
@@ -220,21 +230,127 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 SizedBox(height: 32.0),
-                ElevatedButton(
-                  onPressed: () {
-                    // Navigasi ke halaman TabelPenilaian saat tombol ditekan
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => TabelPenilaian()),
-                    );
-                  },
-                  child: Text("Penilaian"),
-                ),
+ElevatedButton(
+  onPressed: () {
+    // Navigasi ke halaman TabelPenilaian saat tombol ditekan
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => TabelPenilaian()),
+    );
+  },
+  child: Text("Penilaian"),
+),
               ],
             ),
           ),
         ),
-      ),  
+      ),
+    );
+  }
+}
+
+// Kelas Teacher dan TeacherList tidak berubah
+
+
+
+class Teacher {
+  String name;
+  String subject;
+  String imageUrl;
+
+  Teacher(this.name, this.subject, this.imageUrl);
+}
+
+class TeacherList extends StatelessWidget {
+  final List<Teacher> teachers = [
+    Teacher('Guru A', 'Mata Pelajaran 1', 'assets/hemster.jpg'),
+    Teacher('Guru B', 'Mata Pelajaran 2', 'assets/hemster.jpg'),
+    Teacher('Guru C', 'Mata Pelajaran 3', 'assets/hemster.jpg'),
+    Teacher('Guru D', 'Mata Pelajaran 4', 'assets/hemster.jpg'),
+    Teacher('Guru E', 'Mata Pelajaran 5', 'assets/hemster.jpg'),
+    Teacher('Guru F', 'Mata Pelajaran 6', 'assets/hemster.jpg'),
+    Teacher('Guru G', 'Mata Pelajaran 7', 'assets/hemster.jpg'),
+    Teacher('Guru F', 'Mata Pelajaran 6', 'assets/hemster.jpg'),
+    Teacher('Guru G', 'Mata Pelajaran 7', 'assets/hemster.jpg'),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Judul Penilaian'),
+      ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Center(
+              child: Text(
+                '', // Teks di tengah atas halaman
+                style: TextStyle(
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: teachers.length,
+              itemBuilder: (context, index) {
+                return Card(
+                  elevation: 4.0,
+                  margin: EdgeInsets.all(8.0),
+                  child: SizedBox(
+                    height: 100.0, // Perkecil ukuran card
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          SizedBox(
+                            width: 120.0, // Lebar gambar
+                            child: AspectRatio(
+                              aspectRatio: 1, // Rasio aspek 1:1
+                              child: Image.network(
+                                teachers[index].imageUrl,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: 8.0), // Spasi antara gambar dan deskripsi
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  teachers[index].name,
+                                  style: TextStyle(
+                                    fontSize: 18.0,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Text(
+                                  teachers[index].subject,
+                                  style: TextStyle(
+                                    fontSize: 16.0,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Icon(Icons.arrow_forward), // Icon '>' di bagian kanan
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
