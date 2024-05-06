@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shrine/detail_guru.dart';
+import 'package:shrine/update_guru.dart';
 
 import 'appbar.dart';
 
@@ -69,14 +71,12 @@ class _TabelGuruState extends State<TabelGuru> {
 
   Widget _buildDataTable(List<Map<String, dynamic>> data) {
     return DataTable(
-      headingTextStyle:
-          TextStyle(fontWeight: FontWeight.bold, color: Colors.blue),
+      headingTextStyle: TextStyle(fontWeight: FontWeight.bold),
       dataRowHeight: 60,
       columns: [
         DataColumn(label: Text('No')),
         DataColumn(label: Text('NIP')),
         DataColumn(label: Text('Nama')),
-        DataColumn(label: Text('Pangkat')),
         DataColumn(label: Text('Aksi')),
       ],
       rows: data.asMap().entries.map((entry) {
@@ -86,21 +86,30 @@ class _TabelGuruState extends State<TabelGuru> {
           DataCell(Text('$index')), // Nomor
           DataCell(Text(item['nip'].toString())),
           DataCell(Text(item['nama'].toString())),
-          DataCell(Text(item['pangkat'].toString())),
           DataCell(
             Row(
               children: [
                 IconButton(
                   onPressed: () {
-                    // Tambahkan logika untuk tombol Detail
-                    print('Tombol Detail ditekan');
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => DetailGuru(
+                                guru: data[index - 1],
+                              )),
+                    );
                   },
                   icon: Icon(Icons.details),
                 ),
                 IconButton(
                   onPressed: () {
-                    // Tambahkan logika untuk tombol Edit
-                    print('Tombol Edit ditekan');
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => UpdateGuru(
+                                guru: data[index - 1],
+                              )),
+                    );
                   },
                   icon: Icon(Icons.edit),
                 ),
