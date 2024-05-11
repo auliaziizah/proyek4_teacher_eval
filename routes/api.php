@@ -16,13 +16,13 @@ use App\Http\Controllers\AuthController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-
+# Guru
 Route::get('/guru', [GuruController::class,'read_all']);
 Route::get('/guru/{id}', [GuruController::class,'read']);
 Route::post('/guru/create', [GuruController::class,'store']);
 Route::put('/guru/update/{id}', [GuruController::class,'update']);
 Route::delete('/guru/delete/{id}', [GuruController::class, 'delete']);
-
+# Penilaian
 Route::get('/penilaian', [PenilaianController::class, 'read_all']);
 Route::get('/penilaian/{id}', [PenilaianController::class,'read']);
 Route::post('/penilaian/create', [PenilaianController::class, 'store']);
