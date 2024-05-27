@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'appbar.dart';
-import 'tambah_penilaian.dart';
 import 'tabel_penilaian.dart';
 
 class KepsekHomePage extends StatefulWidget {
@@ -19,7 +18,7 @@ class _KepsekHomePageState extends State<KepsekHomePage> {
   @override
   void initState() {
     super.initState();
-    _timer = Timer.periodic(Duration(seconds: 5), (Timer timer) {
+    _timer = Timer.periodic(const Duration(seconds: 5), (Timer timer) {
       if (_currentPage < 2) {
         _currentPage++;
       } else {
@@ -27,7 +26,7 @@ class _KepsekHomePageState extends State<KepsekHomePage> {
       }
       _pageController.animateToPage(
         _currentPage,
-        duration: Duration(milliseconds: 500),
+        duration: const Duration(milliseconds: 500),
         curve: Curves.easeInOut,
       );
     });
@@ -50,11 +49,11 @@ class _KepsekHomePageState extends State<KepsekHomePage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 8.0),
+                const SizedBox(height: 8.0),
                 Stack(
                   alignment: Alignment.center,
                   children: [
-                    Container(
+                    SizedBox(
                       height: 200.0,
                       child: PageView(
                         controller: _pageController,
@@ -65,7 +64,7 @@ class _KepsekHomePageState extends State<KepsekHomePage> {
                         },
                         children: <Widget>[
                           Container(
-                            margin: EdgeInsets.all(8.0),
+                            margin: const EdgeInsets.all(8.0),
                             decoration: BoxDecoration(
                               color: Colors.grey.withOpacity(0.3),
                               borderRadius: BorderRadius.circular(8.0),
@@ -80,7 +79,7 @@ class _KepsekHomePageState extends State<KepsekHomePage> {
                             ),
                           ),
                           Container(
-                            margin: EdgeInsets.all(8.0),
+                            margin: const EdgeInsets.all(8.0),
                             decoration: BoxDecoration(
                               color: Colors.grey.withOpacity(0.3),
                               borderRadius: BorderRadius.circular(8.0),
@@ -95,7 +94,7 @@ class _KepsekHomePageState extends State<KepsekHomePage> {
                             ),
                           ),
                           Container(
-                            margin: EdgeInsets.all(8.0),
+                            margin: const EdgeInsets.all(8.0),
                             decoration: BoxDecoration(
                               color: Colors.grey.withOpacity(0.3),
                               borderRadius: BorderRadius.circular(8.0),
@@ -122,14 +121,15 @@ class _KepsekHomePageState extends State<KepsekHomePage> {
                             onTap: () {
                               _pageController.animateToPage(
                                 index,
-                                duration: Duration(milliseconds: 500),
+                                duration: const Duration(milliseconds: 500),
                                 curve: Curves.easeInOut,
                               );
                             },
                             child: Container(
                               width: 8.0,
                               height: 8.0,
-                              margin: EdgeInsets.symmetric(horizontal: 4.0),
+                              margin:
+                                  const EdgeInsets.symmetric(horizontal: 4.0),
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 color: _currentPage == index
@@ -161,7 +161,7 @@ class _KepsekHomePageState extends State<KepsekHomePage> {
                           },
                           child: Card(
                             elevation: 4.0,
-                            margin: EdgeInsets.all(8.0),
+                            margin: const EdgeInsets.all(8.0),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -171,9 +171,9 @@ class _KepsekHomePageState extends State<KepsekHomePage> {
                                     fit: BoxFit.cover,
                                   ),
                                 ),
-                                SizedBox(height: 8.0),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
+                                const SizedBox(height: 8.0),
+                                const Padding(
+                                  padding: EdgeInsets.all(8.0),
                                   child: Text(
                                     "Judul Penilaian 1",
                                     style: TextStyle(
@@ -200,7 +200,7 @@ class _KepsekHomePageState extends State<KepsekHomePage> {
                           },
                           child: Card(
                             elevation: 4.0,
-                            margin: EdgeInsets.all(8.0),
+                            margin: const EdgeInsets.all(8.0),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -210,9 +210,9 @@ class _KepsekHomePageState extends State<KepsekHomePage> {
                                     fit: BoxFit.cover,
                                   ),
                                 ),
-                                SizedBox(height: 8.0),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
+                                const SizedBox(height: 8.0),
+                                const Padding(
+                                  padding: EdgeInsets.all(8.0),
                                   child: Text(
                                     "Judul Penilaian 2",
                                     style: TextStyle(
@@ -229,16 +229,17 @@ class _KepsekHomePageState extends State<KepsekHomePage> {
                     ],
                   ),
                 ),
-                SizedBox(height: 32.0),
+                const SizedBox(height: 32.0),
                 ElevatedButton(
                   onPressed: () {
                     // Navigasi ke halaman TabelPenilaian saat tombol ditekan
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => TabelPenilaian()),
+                      MaterialPageRoute(
+                          builder: (context) => const TabelPenilaian()),
                     );
                   },
-                  child: Text("Penilaian"),
+                  child: const Text("Penilaian"),
                 ),
               ],
             ),
@@ -276,13 +277,13 @@ class TeacherList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Judul Penilaian'),
+        title: const Text('Judul Penilaian'),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
+          const Padding(
+            padding: EdgeInsets.all(8.0),
             child: Center(
               child: Text(
                 '', // Teks di tengah atas halaman
@@ -299,7 +300,7 @@ class TeacherList extends StatelessWidget {
               itemBuilder: (context, index) {
                 return Card(
                   elevation: 4.0,
-                  margin: EdgeInsets.all(8.0),
+                  margin: const EdgeInsets.all(8.0),
                   child: SizedBox(
                     height: 100.0, // Perkecil ukuran card
                     child: Padding(
@@ -316,7 +317,7 @@ class TeacherList extends StatelessWidget {
                               ),
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                               width: 8.0), // Spasi antara gambar dan deskripsi
                           Expanded(
                             child: Column(
@@ -325,21 +326,22 @@ class TeacherList extends StatelessWidget {
                               children: [
                                 Text(
                                   teachers[index].name,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 18.0,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
                                 Text(
                                   teachers[index].subject,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 16.0,
                                   ),
                                 ),
                               ],
                             ),
                           ),
-                          Icon(Icons.arrow_forward), // Icon '>' di bagian kanan
+                          const Icon(
+                              Icons.arrow_forward), // Icon '>' di bagian kanan
                         ],
                       ),
                     ),
