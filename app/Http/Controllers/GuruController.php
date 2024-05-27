@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use App\Models\Guru;
 
@@ -26,7 +26,12 @@ class GuruController extends Controller
 
     public function store(Request $request)
     {
-        $guru = Guru::create($request->all());
+        $input = $request->all();
+
+        $input['password'] = Hash::make($request->input('password'));
+
+        $guru = Guru::create($input);
+
         return response()->json(['message' => 'Data berhasil disimpan', 'data' => $guru]);
     }
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'colors.dart';
 
 class AppBarBottomNavigator extends StatelessWidget {
@@ -8,11 +9,32 @@ class AppBarBottomNavigator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String pageTitle = ''; // Variabel untuk menyimpan judul halaman
+    return FutureBuilder<String>(
+      future:
+          _getUserRole(), // Mendapatkan peran pengguna dari SharedPreferences
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          // Jika masih loading, tampilkan loading indicator
+          return Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          // Jika terjadi error, tampilkan pesan error
+          return Center(child: Text('Error: ${snapshot.error}'));
+        } else {
+          // Jika berhasil mendapatkan peran pengguna, lanjutkan dengan menampilkan bottom navigation
+          final userRole = snapshot.data!;
+          return _buildBottomNavigator(context, userRole);
+        }
+      },
+    );
+  }
 
-    // Logika untuk menentukan judul halaman berdasarkan rute saat ini
+  // Widget untuk menampilkan Bottom Navigation berdasarkan peran pengguna
+  Widget _buildBottomNavigator(BuildContext context, String userRole) {
+    // Variabel untuk menyimpan judul halaman
+    String pageTitle = '';
+
     final currentRoute = ModalRoute.of(context)?.settings.name;
-    if (currentRoute == '/') {
+    if (currentRoute == '/kepsek_home' || currentRoute == '/guru_home') {
       pageTitle = 'Beranda';
     } else if (currentRoute == '/tabel_guru') {
       pageTitle = 'Data Guru';
@@ -20,18 +42,48 @@ class AppBarBottomNavigator extends StatelessWidget {
       pageTitle = 'Profile';
     }
 
+    // Membuat daftar item Bottom Navigation sesuai peran pengguna
+    List<BottomNavigationBarItem> bottomNavItems = [];
+    if (userRole == 'kepala_sekolah') {
+      bottomNavItems = [
+        BottomNavigationBarItem(
+          icon: Icon(Icons.person_add),
+          label: 'Data Guru',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.home),
+          label: 'Beranda',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.person),
+          label: 'Profile',
+        ),
+      ];
+    } else {
+      bottomNavItems = [
+        BottomNavigationBarItem(
+          icon: Icon(Icons.home),
+          label: 'Beranda',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.person),
+          label: 'Profile',
+        ),
+      ];
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
           pageTitle, // Menampilkan judul halaman dinamis
-          // style: TextStyle(color: white),
+          style: TextStyle(color: Colors.white),
         ),
-        backgroundColor: white.withOpacity(0),
+        backgroundColor: Colors.transparent,
         actions: <Widget>[
           IconButton(
-            icon: const Icon(
+            icon: Icon(
               Icons.search,
-              // color: white,
+              color: Colors.white,
               semanticLabel: 'search',
             ),
             onPressed: () {
@@ -39,9 +91,9 @@ class AppBarBottomNavigator extends StatelessWidget {
             },
           ),
           IconButton(
-            icon: const Icon(
+            icon: Icon(
               Icons.account_circle,
-              // color: white,
+              color: Colors.white,
               semanticLabel: 'profile',
             ),
             onPressed: () {
@@ -53,72 +105,49 @@ class AppBarBottomNavigator extends StatelessWidget {
       body: body,
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: biru1,
-        selectedItemColor: white,
-        unselectedItemColor: white.withOpacity(0.5),
-        currentIndex: _currentIndex(context),
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.white.withOpacity(0.5),
+        currentIndex: _currentIndex(context, userRole),
         onTap: (index) {
-          if (index == 0) {
-            Navigator.of(context).pushReplacementNamed('/tabel_guru');
-          } else if (index == 1) {
-            Navigator.of(context).pushReplacementNamed('/');
-          } else if (index == 2) {
-            Navigator.of(context).pushReplacementNamed('/profile');
+          if (userRole == 'kepala_sekolah') {
+            if (index == 0) {
+              Navigator.of(context).pushReplacementNamed('/tabel_guru');
+            } else if (index == 1) {
+              Navigator.of(context).pushReplacementNamed('/kepsek_home');
+            } else if (index == 2) {
+              Navigator.of(context).pushReplacementNamed('/profile');
+            }
+          } else if (userRole == 'guru') {
+            if (index == 0) {
+              Navigator.of(context).pushReplacementNamed('/guru_home');
+            } else if (index == 1) {
+              Navigator.of(context).pushReplacementNamed('/profile');
+            }
           }
         },
-        items: [
-          BottomNavigationBarItem(
-            icon: Container(
-              decoration: BoxDecoration(
-                color: _currentIndex(context) == 0
-                    ? biru2.withOpacity(0.5)
-                    : biru1,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              padding: EdgeInsets.all(20),
-              child: Icon(Icons.person_add),
-            ),
-            label: 'Data Guru',
-          ),
-          BottomNavigationBarItem(
-            icon: Container(
-              decoration: BoxDecoration(
-                color: _currentIndex(context) == 1
-                    ? biru2.withOpacity(0.5)
-                    : biru1,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              padding: EdgeInsets.all(20),
-              child: Icon(Icons.home),
-            ),
-            label: 'Beranda',
-          ),
-          BottomNavigationBarItem(
-            icon: Container(
-              decoration: BoxDecoration(
-                color: _currentIndex(context) == 2
-                    ? biru2.withOpacity(0.5)
-                    : biru1,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              padding: EdgeInsets.all(20),
-              child: Icon(Icons.person),
-            ),
-            label: 'Profile',
-          ),
-        ],
+        items: bottomNavItems,
       ),
     );
   }
 
   // Fungsi untuk menentukan indeks yang dipilih berdasarkan rute saat ini
-  int _currentIndex(BuildContext context) {
+  int _currentIndex(BuildContext context, String userRole) {
     final currentRoute = ModalRoute.of(context)?.settings.name;
-    if (currentRoute == '/') {
-      return 1; // Jika berada di halaman beranda, sorot indeks ke-1 (Beranda)
+    if (currentRoute == '/kepsek_home' || currentRoute == '/guru_home') {
+      return userRole == 'kepala_sekolah' ? 1 : 0;
     } else if (currentRoute == '/tabel_guru') {
-      return 0; // Jika berada di halaman tambah guru, sorot indeks ke-0 (Tambah Guru)
-    } else {
-      return 2; // Jika berada di halaman lain, sorot indeks ke-2 (Profile)
+      return 0;
+    } else if (currentRoute == '/profile') {
+      return userRole == 'kepala_sekolah' ? 2 : 1;
     }
+    return userRole == 'kepala_sekolah'
+        ? 1
+        : 0; // Default: sorot indeks sesuai peran
+  }
+
+  // Fungsi untuk mendapatkan peran pengguna dari SharedPreferences
+  Future<String> _getUserRole() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('role') ?? 'guru';
   }
 }

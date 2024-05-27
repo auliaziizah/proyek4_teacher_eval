@@ -38,7 +38,17 @@ return [
     'guards' => [
         'web' => [
             'driver' => 'session',
-            'provider' => 'users',
+            'provider' => 'gurus',
+        ],
+    
+        'api' => [
+            'driver' => 'passport',
+            'provider' => 'gurus',
+        ],
+    
+        'guru' => [ 
+            'driver' => 'passport',
+            'provider' => 'gurus',
         ],
     ],
 
@@ -60,15 +70,10 @@ return [
     */
 
     'providers' => [
-        'users' => [
+        'gurus' => [ 
             'driver' => 'eloquent',
-            'model' => App\Models\User::class,
+            'model' => App\Models\Guru::class,
         ],
-
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
     ],
 
     /*
@@ -93,6 +98,12 @@ return [
     'passwords' => [
         'users' => [
             'provider' => 'users',
+            'table' => 'password_reset_tokens',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+        'gurus' => [ // Tambahkan konfigurasi untuk guard 'gurus'
+            'provider' => 'gurus',
             'table' => 'password_reset_tokens',
             'expire' => 60,
             'throttle' => 60,

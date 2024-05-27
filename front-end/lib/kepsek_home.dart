@@ -1,17 +1,17 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'appbar.dart';
-import 'tambah_penilaian.dart'; // Imoprt file tambah_penilaian.dart
+import 'tambah_penilaian.dart';
 import 'tabel_penilaian.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+class KepsekHomePage extends StatefulWidget {
+  const KepsekHomePage({Key? key}) : super(key: key);
 
   @override
-  _HomePageState createState() => _HomePageState();
+  _KepsekHomePageState createState() => _KepsekHomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _KepsekHomePageState extends State<KepsekHomePage> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
   Timer? _timer;
@@ -230,16 +230,16 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 SizedBox(height: 32.0),
-ElevatedButton(
-  onPressed: () {
-    // Navigasi ke halaman TabelPenilaian saat tombol ditekan
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => TabelPenilaian()),
-    );
-  },
-  child: Text("Penilaian"),
-),
+                ElevatedButton(
+                  onPressed: () {
+                    // Navigasi ke halaman TabelPenilaian saat tombol ditekan
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => TabelPenilaian()),
+                    );
+                  },
+                  child: Text("Penilaian"),
+                ),
               ],
             ),
           ),
@@ -250,8 +250,6 @@ ElevatedButton(
 }
 
 // Kelas Teacher dan TeacherList tidak berubah
-
-
 
 class Teacher {
   String name;
@@ -318,7 +316,8 @@ class TeacherList extends StatelessWidget {
                               ),
                             ),
                           ),
-                          SizedBox(width: 8.0), // Spasi antara gambar dan deskripsi
+                          SizedBox(
+                              width: 8.0), // Spasi antara gambar dan deskripsi
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'home.dart';
+import 'kepsek_home.dart';
+import 'guru_home.dart';
 import 'login.dart';
 import 'profile.dart';
 import 'tabel_guru.dart';
@@ -17,7 +18,8 @@ class ShrineApp extends StatelessWidget {
       initialRoute: '/login',
       routes: {
         '/login': (BuildContext context) => const LoginPage(),
-        '/': (BuildContext context) => const HomePage(),
+        '/kepsek_home': (BuildContext context) => const KepsekHomePage(),
+        '/guru_home': (BuildContext context) => const GuruHomePage(),
         '/tabel_guru': (BuildContext context) => const TabelGuru(),
         '/profile': (BuildContext context) => const Profile(),
         '/tambah_guru': (BuildContext context) => const TambahGuru(),

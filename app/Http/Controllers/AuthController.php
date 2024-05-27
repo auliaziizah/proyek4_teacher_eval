@@ -3,33 +3,48 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Guru;
 
 class AuthController extends Controller
 {
     public function login(Request $request)
     {
-        $credentials = $request->only('nip', 'password');
+        $nip = $request->input('nip');
+        $password = $request->input('password');
 
-        if (Auth::attempt($credentials)) {
-            $user = Auth::user();
-            $token = $user->createToken('Token Name')->plainTextToken;
+        // Validasi input
+        $request->validate([
+            'nip' => 'required',
+            'password' => 'required'
+        ]);
 
-            return response()->json(['token' => $token], 200);
+        $guru = Guru::where('nip', $nip)->first();
+
+        if ($guru) {
+            // Memeriksa apakah password cocok
+            if ($password === $guru->password) {
+                // Tentukan peran pengguna berdasarkan NIP
+                $role = $nip === '221511004' ? 'kepala_sekolah' : 'guru';
+
+                // Set sesi isLoggedIn menjadi true setelah login berhasil
+                $request->session()->put([
+                    'id' => $guru->id,
+                    'nip' => $guru->nip,
+                    'logged_in' => true,
+                    'role' => $role 
+                ]);
+                return response()->json(['token' => 'example_token', 'role' => $role, 'message' => 'Login successful'], 200);
+            } else {
+                return response()->json(['message' => 'Wrong Password'], 401);
+            }
+        } else {
+            return response()->json(['message' => 'Username not Found'], 404);
         }
+    }
 
-        // Cek jika NIP tidak ditemukan
-        $user = User::where('nip', $request->nip)->first();
-        if (!$user) {
-            return response()->json(['error' => 'NIP tidak ditemukan'], 404);
-        }
-
-        // Cek jika password salah
-        if (!Hash::check($request->password, $user->password)) {
-            return response()->json(['error' => 'Password salah'], 401);
-        }
-
-        // Jika ada kesalahan lain yang tidak tertangani
-        return response()->json(['error' => 'Terjadi kesalahan saat proses login'], 500);
+    public function logout(Request $request)
+    {
+        $request->session()->flush();
+        return response()->json(['message' => 'Logged out successfully'], 200);
     }
 }
