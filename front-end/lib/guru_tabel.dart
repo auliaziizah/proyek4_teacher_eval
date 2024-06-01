@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:shrine/detail_guru.dart';
-import 'package:shrine/update_guru.dart';
+import 'package:shrine/guru_detail.dart';
+import 'package:shrine/guru_update.dart';
 
 import 'appbar.dart';
 
