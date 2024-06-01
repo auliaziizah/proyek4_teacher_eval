@@ -16,6 +16,7 @@ class _TambahPenilaianState extends State<TambahPenilaian> {
   final TextEditingController _judulController = TextEditingController();
   final TextEditingController _tglController = TextEditingController();
   final TextEditingController _imageController = TextEditingController();
+  final TextEditingController _komponenController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +43,26 @@ class _TambahPenilaianState extends State<TambahPenilaian> {
               ),
               TextFormField(
                 controller: _tglController,
-                decoration: InputDecoration(labelText: 'Tanggal Penilaian'),
+                decoration: InputDecoration(
+                  labelText: 'Tanggal Penilaian',
+                  hintText: 'Pilih tanggal',
+                ),
+                readOnly: true,
+                onTap: () async {
+                  DateTime? pickedDate = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(2000),
+                    lastDate: DateTime(2101),
+                  );
+
+                  if (pickedDate != null) {
+                    String formattedDate = "${pickedDate.toLocal()}".split(' ')[0];
+                    setState(() {
+                      _tglController.text = formattedDate;
+                    });
+                  }
+                },
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Tanggal Penilaian harus diisi';
@@ -56,6 +76,16 @@ class _TambahPenilaianState extends State<TambahPenilaian> {
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'URL Image harus diisi';
+                  }
+                  return null;
+                },
+              ),
+              TextFormField(
+                controller: _komponenController,
+                decoration: InputDecoration(labelText: 'Komponen Penilaian'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Komponen Penilaian harus diisi';
                   }
                   return null;
                 },
@@ -85,6 +115,7 @@ class _TambahPenilaianState extends State<TambahPenilaian> {
       'judul_penilaian': _judulController.text,
       'tgl_penilaian': _tglController.text,
       'image': _imageController.text,
+      'komponen_penilaian': _komponenController.text,
     };
 
     // URL endpoint API untuk menambahkan data penilaian
@@ -146,6 +177,7 @@ class _TambahPenilaianState extends State<TambahPenilaian> {
     _judulController.dispose();
     _tglController.dispose();
     _imageController.dispose();
+    _komponenController.dispose();
     super.dispose();
   }
 }
