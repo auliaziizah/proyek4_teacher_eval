@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shrine/pertanyaan_list.dart';
 import 'penilaian_komponen_tambah.dart';
 
 class KomponenPenilaian extends StatefulWidget {
@@ -35,7 +36,7 @@ class _KomponenPenilaianState extends State<KomponenPenilaian> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Komponen Penilaian'),
+        title: const Text('Komponen Penilaian'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -72,8 +73,8 @@ class _KomponenPenilaianState extends State<KomponenPenilaian> {
                           IconButton(
                             icon: Icon(Icons.delete),
                             onPressed: () async {
-                              final success = await _deleteKomponen(
-                                  komponen['id'].toString());
+                              final success =
+                                  await _deleteKomponen(komponen['id']);
                               if (success) {
                                 setState(() {
                                   _komponenFuture = _fetchData();
@@ -84,7 +85,14 @@ class _KomponenPenilaianState extends State<KomponenPenilaian> {
                           IconButton(
                             icon: Icon(Icons.arrow_forward),
                             onPressed: () {
-                              // Action for forward button
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => DaftarPertanyaan(
+                                    komponen: komponen,
+                                  ),
+                                ),
+                              );
                             },
                           ),
                         ],

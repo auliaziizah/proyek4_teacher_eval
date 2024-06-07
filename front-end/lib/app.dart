@@ -29,7 +29,7 @@ class ShrineApp extends StatelessWidget {
         '/tabel_penilaian': (BuildContext context) => const TabelPenilaian(),
         '/komponen_penilaian': (BuildContext context) =>
             const KomponenPenilaian(),
-        '/tambah_komponen': (BuildContext context) => const TambahKomponen()
+        '/tambah_komponen': (BuildContext context) => const TambahKomponen(),
       },
     );
   }

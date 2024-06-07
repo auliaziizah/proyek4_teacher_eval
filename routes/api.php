@@ -6,6 +6,7 @@ use App\Http\Controllers\GuruController;
 use App\Http\Controllers\PenilaianController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\KomponenController;
+use App\Http\Controllers\PertanyaanController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -37,3 +38,9 @@ Route::get('/komponen', [KomponenController::class,'read_all']);
 Route::post('/komponen/create', [KomponenController::class,'store']);
 Route::put('/komponen/update/{id}', [KomponenController::class,'update']);
 Route::delete('/komponen/delete/{id}', [KomponenController::class, 'delete']);
+# Pertanyaan
+Route::get('/pertanyaan', [PertanyaanController::class,'read_all']);
+Route::get('/pertanyaan/{id}', [PertanyaanController::class,'read']);
+Route::post('/pertanyaan/create', [PertanyaanController::class,'store']);
+Route::put('/pertanyaan/update/{id}', [PertanyaanController::class,'update']);
+Route::delete('/pertanyaan/delete/{id}', [PertanyaanController::class, 'delete']);
