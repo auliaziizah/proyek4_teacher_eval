@@ -9,6 +9,8 @@ import 'guru_tambah.dart';
 import 'penilaian_tambah.dart';
 import 'penilaian_tabel.dart';
 import 'komponen_tambah.dart';
+import 'pengumpulan_tabel.dart';
+import 'pengumpulan_tambah.dart';
 
 class ShrineApp extends StatelessWidget {
   const ShrineApp({Key? key}) : super(key: key);
@@ -29,6 +31,8 @@ class ShrineApp extends StatelessWidget {
         '/tabel_penilaian': (BuildContext context) => const TabelPenilaian(),
         '/komponen_list': (BuildContext context) => const KomponenList(),
         '/tambah_komponen': (BuildContext context) => const TambahKomponen(),
+        '/tambah_pengumpulan': (BuildContext context) => TambahPengumpulan(),
+        '/tabel_pengumpulan': (BuildContext context) => TabelPengumpulan(),
       },
     );
   }
