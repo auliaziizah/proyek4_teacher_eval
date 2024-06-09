@@ -98,7 +98,7 @@ class _TabelGuruState extends State<TabelGuru> {
                       context,
                       MaterialPageRoute(
                           builder: (context) => DetailGuru(
-                                guru: data[index - 1],
+                                id: item['id'],
                               )),
                     );
                   },
