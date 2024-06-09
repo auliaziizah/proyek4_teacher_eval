@@ -82,7 +82,7 @@ class _PertanyaanFormState extends State<PertanyaanForm> {
           widget.komponenId, widget.idPenilaian, widget.idGuru);
     } catch (e) {
       print('Error fetching pertanyaan: $e');
-      return [];
+      return Future.error('Gagal memuat pertanyaan: $e');
     }
   }
 
@@ -104,44 +104,30 @@ class _PertanyaanFormState extends State<PertanyaanForm> {
     });
   }
 
-  Future<void> _submitJawaban() async {
-    final List<Map<String, dynamic>> jawabanList = [];
-
-    for (var pertanyaan in (await _pertanyaanFuture)) {
-      final id = pertanyaan.id;
-      final skor = _skorJawabanMap[id] ?? 0;
-      final ketersediaan = _ketersediaanJawabanMap[id] ?? 0;
-      final teksJawaban = _textJawabanMap[id] ?? '';
-
-      jawabanList.add({
-        'id_penilaian': widget.idPenilaian,
-        'id_guru': widget.idGuru,
-        'id_komponen': widget.komponenId,
-        'id_pertanyaan': id,
-        'skor': skor,
-        'ketersediaan': ketersediaan,
-        'teks_jawaban': teksJawaban,
-      });
-    }
-
-    print(jawabanList); // Mencetak jawabanList sebelum dikirim ke server
-
-    final response = await http.post(
-      Uri.parse('http://127.0.0.1:8000/api/jawaban/create'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode({'jawaban': jawabanList}),
-    );
-
-    if (response.statusCode == 200) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Jawaban berhasil disimpan')),
+  Future<void> submitJawaban(
+      int idPertanyaan, int skor, int ketersediaan, String keterangan) async {
+    try {
+      final response = await http.post(
+        Uri.parse('http://127.0.0.1:8000/api/jawaban/create'),
+        body: {
+          'id_penilaian': widget.idPenilaian.toString(),
+          'id_guru': widget.idGuru.toString(),
+          'id_komponen': widget.komponenId.toString(),
+          'id_pertanyaan': idPertanyaan.toString(),
+          'skor': skor.toString(),
+          'ketersediaan': ketersediaan.toString(),
+          'keterangan': keterangan,
+        },
       );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Gagal menyimpan jawaban')),
-      );
+
+      if (response.statusCode == 200) {
+        print('Jawaban berhasil dikirim');
+        Navigator.pushNamed(context, '/kepsek_home');
+      } else {
+        print('Gagal mengirim jawaban: ${response.reasonPhrase}');
+      }
+    } catch (e) {
+      print('Gagal mengirim jawaban: $e');
     }
   }
 
@@ -216,6 +202,21 @@ class _PertanyaanFormState extends State<PertanyaanForm> {
                           labelText: 'Isi jawaban',
                         ),
                       ),
+                      SizedBox(height: 8),
+                      ElevatedButton(
+                        onPressed: () {
+                          final int idPertanyaan = pertanyaan.id;
+                          final int skor = _skorJawabanMap[idPertanyaan] ?? 0;
+                          final int ketersediaan =
+                              _ketersediaanJawabanMap[idPertanyaan] ?? 0;
+                          final String keterangan =
+                              _textJawabanMap[idPertanyaan] ?? '';
+
+                          submitJawaban(
+                              idPertanyaan, skor, ketersediaan, keterangan);
+                        },
+                        child: Text('Submit Jawaban'),
+                      ),
                     ],
                   ),
                 );
@@ -225,10 +226,6 @@ class _PertanyaanFormState extends State<PertanyaanForm> {
             return Center(child: Text('Tidak ada data pertanyaan'));
           }
         },
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _submitJawaban,
-        child: Icon(Icons.check),
       ),
     );
   }

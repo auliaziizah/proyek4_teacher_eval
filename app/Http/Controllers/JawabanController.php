@@ -31,8 +31,8 @@ class JawabanController extends Controller
             'id_guru' => 'required|integer',
             'id_komponen' => 'required|integer',
             'id_pertanyaan' => 'required|integer',
-            'skor' => 'required|integer|min:1|max:5',
-            'ketersediaan' => 'required|integer|in:0,1',
+            'skor' => 'required|integer',
+            'ketersediaan' => 'required|integer',
             'keterangan' => 'nullable|string',
         ]);
 

@@ -97,7 +97,7 @@ class AppBarBottomNavigator extends StatelessWidget {
               semanticLabel: 'profile',
             ),
             onPressed: () {
-              print('Profile button');
+              Navigator.of(context).pushReplacementNamed('/profile');
             },
           ),
         ],
@@ -142,7 +142,7 @@ class AppBarBottomNavigator extends StatelessWidget {
     }
     return userRole == 'kepala_sekolah'
         ? 1
-        : 0; // Default: sorot indeks sesuai peran
+        : 0; 
   }
 
   // Fungsi untuk mendapatkan peran pengguna dari SharedPreferences

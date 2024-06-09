@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('data_jawaban', function (Blueprint $table) {
             $table->id();
-            $table->string('id_penilaian');
-            $table->string('id_guru');
-            $table->string('id_komponen');
-            $table->string('id_pertanyaan');
+            $table->integer('id_penilaian');
+            $table->integer('id_guru');
+            $table->integer('id_komponen');
+            $table->integer('id_pertanyaan');
             $table->integer('skor');
             $table->integer('ketersediaan');
             $table->string('keterangan');
