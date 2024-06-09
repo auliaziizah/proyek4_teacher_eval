@@ -39,7 +39,6 @@ class GuruService {
 
     if (response.statusCode == 200) {
       final List<dynamic> data = json.decode(response.body)['data'];
-      // Filter data guru dengan nip != 1234567
       List<Guru> filteredGurus = data
           .map((e) => Guru.fromJson(e))
           .where((guru) => guru.nip != '1234567')

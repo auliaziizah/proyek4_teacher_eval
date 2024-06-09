@@ -31,6 +31,17 @@ class PertanyaanController extends Controller
         return response()->json(['message' => 'Success', 'data' => $pertanyaan]);
     }
 
+    public function read_id($id)
+    {
+        $pertanyaan = Pertanyaan::find($id);
+
+        if (!$pertanyaan) {
+            return response()->json(['message' => 'Guru not found'], 404);
+        }
+
+        return response()->json(['message' => 'Data berhasil ditemukan', 'data' => $pertanyaan]);
+    }
+
     public function store(Request $request)
     {
         $input = $request->all();

@@ -109,26 +109,38 @@ class _PertanyaanFormState extends State<PertanyaanForm> {
     try {
       final response = await http.post(
         Uri.parse('http://127.0.0.1:8000/api/jawaban/create'),
-        body: {
-          'id_penilaian': widget.idPenilaian.toString(),
-          'id_guru': widget.idGuru.toString(),
-          'id_komponen': widget.komponenId.toString(),
-          'id_pertanyaan': idPertanyaan.toString(),
-          'skor': skor.toString(),
-          'ketersediaan': ketersediaan.toString(),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode({
+          'id_penilaian': widget.idPenilaian,
+          'id_guru': widget.idGuru,
+          'id_komponen': widget.komponenId,
+          'id_pertanyaan': idPertanyaan,
+          'skor': skor,
+          'ketersediaan': ketersediaan,
           'keterangan': keterangan,
-        },
+        }),
       );
 
       if (response.statusCode == 200) {
         print('Jawaban berhasil dikirim');
-        Navigator.pushNamed(context, '/kepsek_home');
       } else {
         print('Gagal mengirim jawaban: ${response.reasonPhrase}');
       }
     } catch (e) {
       print('Gagal mengirim jawaban: $e');
     }
+  }
+
+  Future<void> submitAllJawaban() async {
+    for (var idPertanyaan in _skorJawabanMap.keys) {
+      final int skor = _skorJawabanMap[idPertanyaan] ?? 0;
+      final int ketersediaan = _ketersediaanJawabanMap[idPertanyaan] ?? 0;
+      final String keterangan = _textJawabanMap[idPertanyaan] ?? '';
+
+      await submitJawaban(idPertanyaan, skor, ketersediaan, keterangan);
+    }
+
+    Navigator.pushNamed(context, '/kepsek_home');
   }
 
   @override
@@ -145,82 +157,81 @@ class _PertanyaanFormState extends State<PertanyaanForm> {
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else if (snapshot.hasData) {
-            return ListView.builder(
-              itemCount: snapshot.data!.length,
-              itemBuilder: (context, index) {
-                final pertanyaan = snapshot.data![index];
-                return ListTile(
-                  title: Text(pertanyaan.pertanyaan),
-                  subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text('Jawaban (1-5):'),
-                      Row(
-                        children: List.generate(5, (int i) {
-                          final value = i + 1;
-                          return Expanded(
-                            child: RadioListTile<int>(
-                              title: Text('$value'),
-                              value: value,
-                              groupValue: _skorJawabanMap[pertanyaan.id],
-                              onChanged: (newValue) {
-                                _setSkorJawaban(pertanyaan.id, newValue!);
-                              },
+            return Column(
+              children: [
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: snapshot.data!.length,
+                    itemBuilder: (context, index) {
+                      final pertanyaan = snapshot.data![index];
+                      return ListTile(
+                        title: Text(pertanyaan.pertanyaan),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text('Jawaban (1-5):'),
+                            Row(
+                              children: List.generate(5, (int i) {
+                                final value = i + 1;
+                                return Expanded(
+                                  child: RadioListTile<int>(
+                                    title: Text('$value'),
+                                    value: value,
+                                    groupValue: _skorJawabanMap[pertanyaan.id],
+                                    onChanged: (newValue) {
+                                      _setSkorJawaban(pertanyaan.id, newValue!);
+                                    },
+                                  ),
+                                );
+                              }),
                             ),
-                          );
-                        }),
-                      ),
-                      Text('Ketersediaan (Ada/Tidak):'),
-                      Column(
-                        children: <Widget>[
-                          RadioListTile<int>(
-                            title: Text('Ada'),
-                            value: 1,
-                            groupValue: _ketersediaanJawabanMap[pertanyaan.id],
-                            onChanged: (value) {
-                              _setKetersediaanJawaban(pertanyaan.id, value!);
-                            },
-                          ),
-                          RadioListTile<int>(
-                            title: Text('Tidak'),
-                            value: 0,
-                            groupValue: _ketersediaanJawabanMap[pertanyaan.id],
-                            onChanged: (value) {
-                              _setKetersediaanJawaban(pertanyaan.id, value!);
-                            },
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 8),
-                      Text('Jawaban Teks:'),
-                      TextField(
-                        onChanged: (value) {
-                          _setTextJawaban(pertanyaan.id, value);
-                        },
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Isi jawaban',
+                            Text('Ketersediaan (Ada/Tidak):'),
+                            Column(
+                              children: <Widget>[
+                                RadioListTile<int>(
+                                  title: Text('Ada'),
+                                  value: 1,
+                                  groupValue:
+                                      _ketersediaanJawabanMap[pertanyaan.id],
+                                  onChanged: (value) {
+                                    _setKetersediaanJawaban(
+                                        pertanyaan.id, value!);
+                                  },
+                                ),
+                                RadioListTile<int>(
+                                  title: Text('Tidak'),
+                                  value: 0,
+                                  groupValue:
+                                      _ketersediaanJawabanMap[pertanyaan.id],
+                                  onChanged: (value) {
+                                    _setKetersediaanJawaban(
+                                        pertanyaan.id, value!);
+                                  },
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 8),
+                            Text('Jawaban Teks:'),
+                            TextField(
+                              onChanged: (value) {
+                                _setTextJawaban(pertanyaan.id, value);
+                              },
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(),
+                                labelText: 'Isi jawaban',
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                      SizedBox(height: 8),
-                      ElevatedButton(
-                        onPressed: () {
-                          final int idPertanyaan = pertanyaan.id;
-                          final int skor = _skorJawabanMap[idPertanyaan] ?? 0;
-                          final int ketersediaan =
-                              _ketersediaanJawabanMap[idPertanyaan] ?? 0;
-                          final String keterangan =
-                              _textJawabanMap[idPertanyaan] ?? '';
-
-                          submitJawaban(
-                              idPertanyaan, skor, ketersediaan, keterangan);
-                        },
-                        child: Text('Submit Jawaban'),
-                      ),
-                    ],
+                      );
+                    },
                   ),
-                );
-              },
+                ),
+                ElevatedButton(
+                  onPressed: submitAllJawaban,
+                  child: Text('Submit Semua Jawaban'),
+                ),
+              ],
             );
           } else {
             return Center(child: Text('Tidak ada data pertanyaan'));

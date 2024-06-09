@@ -44,6 +44,7 @@ Route::delete('/komponen/delete/{id}', [KomponenController::class, 'delete']);
 # Pertanyaan
 Route::get('/pertanyaan', [PertanyaanController::class,'read_all']);
 Route::get('/pertanyaan/{id}', [PertanyaanController::class,'read']);
+Route::get('/pertanyaan/read/{id}', [PertanyaanController::class,'read_id']);
 Route::post('/pertanyaan/create', [PertanyaanController::class,'store']);
 Route::put('/pertanyaan/update/{id}', [PertanyaanController::class,'update']);
 Route::delete('/pertanyaan/delete/{id}', [PertanyaanController::class, 'delete']);
@@ -55,5 +56,7 @@ Route::put('/jawaban/update/{id}', [JawabanController::class,'update']);
 Route::delete('/jawaban/delete/{id}', [JawabanController::class, 'delete']);
 # Pengumpulan
 Route::get('/pengumpulan', [PengumpulanController::class,'read_all']);
+Route::get('/jawaban/{id_penilaian}/{id_guru}/{id_komponen}', [JawabanController::class, 'read']);
+Route::get('/jawaban/{id_penilaian}/{id_guru}/{id_komponen}/{id_pertanyaan}', [JawabanController::class, 'read_jawaban']);
 Route::post('/pengumpulan/create', [PengumpulanController::class,'store']);
 Route::delete('/pengumpulan/delete/{id}', [PengumpulanController::class, 'delete']);

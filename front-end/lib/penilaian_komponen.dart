@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shrine/penilaian_hasil.dart';
 import 'penilaian_pertanyaan_form.dart';
 
 class KomponenPenilaian extends StatefulWidget {
@@ -59,20 +60,45 @@ class _KomponenPenilaianState extends State<KomponenPenilaian> {
                   return Card(
                     child: ListTile(
                       title: Text(komponen['nama_komponen']),
-                      onTap: () {
-                        print(
-                            "ID Penilaian, ID Guru, dan ID Komponen yang dikirim:  ${widget.idPenilaian}, ${widget.idGuru}, dan ${komponen['id']}");
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => PertanyaanForm(
-                              komponenId: komponen['id'],
-                              idPenilaian: widget.idPenilaian,
-                              idGuru: widget.idGuru,
-                            ),
+                      subtitle: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          TextButton(
+                            onPressed: () {
+                              print(
+                                  "ID Penilaian, ID Guru, dan ID Komponen yang dikirim: ${widget.idPenilaian}, ${widget.idGuru}, dan ${komponen['id']}");
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => PertanyaanForm(
+                                    komponenId: komponen['id'],
+                                    idPenilaian: widget.idPenilaian,
+                                    idGuru: widget.idGuru,
+                                  ),
+                                ),
+                              );
+                            },
+                            child: Text('Isi Penilaian'),
                           ),
-                        );
-                      },
+                          TextButton(
+                            onPressed: () {
+                              print(
+                                  "ID Penilaian, ID Guru, dan ID Komponen yang dikirim: ${widget.idPenilaian}, ${widget.idGuru}, dan ${komponen['id']}");
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => HasilPenilaian(
+                                    idKomponen: komponen['id'],
+                                    idPenilaian: widget.idPenilaian,
+                                    idGuru: widget.idGuru,
+                                  ),
+                                ),
+                              );
+                            },
+                            child: Text('Lihat Hasil'),
+                          ),
+                        ],
+                      ),
                     ),
                   );
                 },
