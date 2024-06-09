@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:shrine/penilaian_komponen.dart';
+import 'komponen_list.dart';
 import 'kepsek_home.dart';
 import 'guru_home.dart';
 import 'login.dart';
 import 'profile.dart';
 import 'guru_tabel.dart';
 import 'guru_tambah.dart';
-import 'tambah_penilaian.dart';
-import 'tabel_penilaian.dart';
-import 'penilaian_komponen_tambah.dart';
+import 'penilaian_tambah.dart';
+import 'penilaian_tabel.dart';
+import 'komponen_tambah.dart';
 
 class ShrineApp extends StatelessWidget {
   const ShrineApp({Key? key}) : super(key: key);
@@ -20,15 +20,14 @@ class ShrineApp extends StatelessWidget {
       initialRoute: '/login',
       routes: {
         '/login': (BuildContext context) => const LoginPage(),
-        '/kepsek_home': (BuildContext context) => const KepsekHomePage(),
+        '/kepsek_home': (BuildContext context) => KepsekHomePage(),
         '/guru_home': (BuildContext context) => const GuruHomePage(),
         '/tabel_guru': (BuildContext context) => const TabelGuru(),
         '/profile': (BuildContext context) => const Profile(),
         '/tambah_guru': (BuildContext context) => const TambahGuru(),
         '/tambah_penilaian': (BuildContext context) => const TambahPenilaian(),
         '/tabel_penilaian': (BuildContext context) => const TabelPenilaian(),
-        '/komponen_penilaian': (BuildContext context) =>
-            const KomponenPenilaian(),
+        '/komponen_list': (BuildContext context) => const KomponenList(),
         '/tambah_komponen': (BuildContext context) => const TambahKomponen(),
       },
     );

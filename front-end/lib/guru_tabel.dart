@@ -70,6 +70,9 @@ class _TabelGuruState extends State<TabelGuru> {
   }
 
   Widget _buildDataTable(List<Map<String, dynamic>> data) {
+    // Filter out data with NIP "1234567"
+    data = data.where((item) => item['nip'] != '1234567').toList();
+
     return DataTable(
       headingTextStyle: TextStyle(fontWeight: FontWeight.bold),
       dataRowHeight: 60,

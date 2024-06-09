@@ -76,14 +76,14 @@ class AppBarBottomNavigator extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           pageTitle, // Menampilkan judul halaman dinamis
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(color: const Color.fromARGB(255, 0, 0, 0)),
         ),
         backgroundColor: Colors.transparent,
         actions: <Widget>[
           IconButton(
             icon: Icon(
               Icons.search,
-              color: Colors.white,
+              color: const Color.fromARGB(255, 0, 0, 0),
               semanticLabel: 'search',
             ),
             onPressed: () {
@@ -93,7 +93,7 @@ class AppBarBottomNavigator extends StatelessWidget {
           IconButton(
             icon: Icon(
               Icons.account_circle,
-              color: Colors.white,
+              color: const Color.fromARGB(255, 0, 0, 0),
               semanticLabel: 'profile',
             ),
             onPressed: () {

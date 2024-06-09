@@ -24,7 +24,7 @@ class AuthController extends Controller
             // Memeriksa apakah password cocok
             if ($password === $guru->password) {
                 // Tentukan peran pengguna berdasarkan NIP
-                $role = $nip === '221511004' ? 'kepala_sekolah' : 'guru';
+                $role = $nip === '1234567' ? 'kepala_sekolah' : 'guru';
 
                 // Set sesi isLoggedIn menjadi true setelah login berhasil
                 $request->session()->put([

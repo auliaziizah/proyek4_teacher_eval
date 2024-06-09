@@ -11,12 +11,8 @@ class TambahPenilaian extends StatefulWidget {
 
 class _TambahPenilaianState extends State<TambahPenilaian> {
   final _formKey = GlobalKey<FormState>();
-
-  // Controller untuk bidang isian
   final TextEditingController _judulController = TextEditingController();
   final TextEditingController _tglController = TextEditingController();
-  final TextEditingController _imageController = TextEditingController();
-  final TextEditingController _komponenController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +53,8 @@ class _TambahPenilaianState extends State<TambahPenilaian> {
                   );
 
                   if (pickedDate != null) {
-                    String formattedDate = "${pickedDate.toLocal()}".split(' ')[0];
+                    String formattedDate =
+                        "${pickedDate.toLocal()}".split(' ')[0];
                     setState(() {
                       _tglController.text = formattedDate;
                     });
@@ -70,33 +67,10 @@ class _TambahPenilaianState extends State<TambahPenilaian> {
                   return null;
                 },
               ),
-              TextFormField(
-                controller: _imageController,
-                decoration: InputDecoration(labelText: 'Image (URL)'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'URL Image harus diisi';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _komponenController,
-                decoration: InputDecoration(labelText: 'Komponen Penilaian'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Komponen Penilaian harus diisi';
-                  }
-                  return null;
-                },
-              ),
               SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
-                  // Validasi form sebelum disubmit
                   if (_formKey.currentState!.validate()) {
-                    // Lakukan sesuatu ketika form valid
-                    // Misalnya, simpan data penilaian
                     _submitForm();
                   }
                 },
@@ -110,57 +84,33 @@ class _TambahPenilaianState extends State<TambahPenilaian> {
   }
 
   void _submitForm() async {
-    // Data penilaian yang akan dikirim ke server
     Map<String, String> penilaianData = {
       'judul_penilaian': _judulController.text,
       'tgl_penilaian': _tglController.text,
-      'image': _imageController.text,
-      'komponen_penilaian': _komponenController.text,
     };
 
-    // URL endpoint API untuk menambahkan data penilaian
     String apiUrl = 'http://127.0.0.1:8000/api/penilaian/create';
 
     try {
-      // Kirim permintaan POST ke server
       var response = await http.post(
         Uri.parse(apiUrl),
         body: json.encode(penilaianData),
         headers: {'Content-Type': 'application/json'},
       );
 
-      // Cek status kode respon
-      if (response.statusCode == 201) {
-        // Data berhasil ditambahkan, tampilkan pesan sukses
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text('Sukses'),
-              content: Text('Data penilaian berhasil ditambahkan!'),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () {
-                    // Kembali ke halaman sebelumnya
-                    Navigator.of(context).pop();
-                  },
-                  child: Text('OK'),
-                ),
-              ],
-            );
-          },
-        );
+      if (response.statusCode == 200) {
+        Navigator.pushReplacementNamed(context, '/kepsek_home');
       } else {
-        // Terjadi kesalahan saat menambahkan data, tampilkan pesan error
+        var responseData = json.decode(response.body);
+        String errorMessage = responseData['message'] ?? 'Unknown error';
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Gagal menambahkan data penilaian: ${response.body}'),
+            content: Text('Gagal menambahkan data penilaian: $errorMessage'),
             duration: Duration(seconds: 2),
           ),
         );
       }
     } catch (error) {
-      // Tangani kesalahan jika terjadi
       print('Error: $error');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -173,11 +123,8 @@ class _TambahPenilaianState extends State<TambahPenilaian> {
 
   @override
   void dispose() {
-    // Pastikan untuk membebaskan controller saat widget dihapus dari pohon widget
     _judulController.dispose();
     _tglController.dispose();
-    _imageController.dispose();
-    _komponenController.dispose();
     super.dispose();
   }
 }

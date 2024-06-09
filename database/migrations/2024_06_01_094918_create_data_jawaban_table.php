@@ -15,8 +15,11 @@ return new class extends Migration
             $table->id();
             $table->string('id_penilaian');
             $table->string('id_guru');
+            $table->string('id_komponen');
             $table->string('id_pertanyaan');
-            $table->string('jawaban');
+            $table->integer('skor');
+            $table->integer('ketersediaan');
+            $table->string('keterangan');
             $table->timestamps();
         });
     }

@@ -1,11 +1,13 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:shrine/pertanyaan_list.dart';
-import 'penilaian_komponen_tambah.dart';
+import 'penilaian_pertanyaan_form.dart';
 
 class KomponenPenilaian extends StatefulWidget {
-  const KomponenPenilaian({Key? key}) : super(key: key);
+  final int idPenilaian, idGuru;
+  const KomponenPenilaian(
+      {Key? key, required this.idPenilaian, required this.idGuru})
+      : super(key: key);
 
   @override
   _KomponenPenilaianState createState() => _KomponenPenilaianState();
@@ -34,6 +36,8 @@ class _KomponenPenilaianState extends State<KomponenPenilaian> {
 
   @override
   Widget build(BuildContext context) {
+    print(
+        "ID Penilaian dan ID Guru yang diterima: ${widget.idPenilaian} dan ${widget.idGuru}");
     return Scaffold(
       appBar: AppBar(
         title: const Text('Komponen Penilaian'),
@@ -55,48 +59,20 @@ class _KomponenPenilaianState extends State<KomponenPenilaian> {
                   return Card(
                     child: ListTile(
                       title: Text(komponen['nama_komponen']),
-                      trailing: Wrap(
-                        spacing: 8,
-                        children: <Widget>[
-                          IconButton(
-                            icon: Icon(Icons.edit),
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      TambahKomponen(komponen: komponen),
-                                ),
-                              );
-                            },
+                      onTap: () {
+                        print(
+                            "ID Penilaian, ID Guru, dan ID Komponen yang dikirim:  ${widget.idPenilaian}, ${widget.idGuru}, dan ${komponen['id']}");
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => PertanyaanForm(
+                              komponenId: komponen['id'],
+                              idPenilaian: widget.idPenilaian,
+                              idGuru: widget.idGuru,
+                            ),
                           ),
-                          IconButton(
-                            icon: Icon(Icons.delete),
-                            onPressed: () async {
-                              final success =
-                                  await _deleteKomponen(komponen['id']);
-                              if (success) {
-                                setState(() {
-                                  _komponenFuture = _fetchData();
-                                });
-                              }
-                            },
-                          ),
-                          IconButton(
-                            icon: Icon(Icons.arrow_forward),
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => DaftarPertanyaan(
-                                    komponen: komponen,
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                        ],
-                      ),
+                        );
+                      },
                     ),
                   );
                 },
@@ -107,85 +83,6 @@ class _KomponenPenilaianState extends State<KomponenPenilaian> {
           },
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => TambahKomponen(),
-            ),
-          );
-        },
-        child: Icon(Icons.add),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
-  }
-
-  Future<bool> _deleteKomponen(String id) async {
-    String apiUrl = 'http://127.0.0.1:8000/api/komponen/delete/$id';
-
-    try {
-      bool confirmDelete = await showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Konfirmasi Hapus Data'),
-            content: Text(
-                'Apakah Anda yakin ingin menghapus data komponen penilaian ini?'),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop(true);
-                },
-                child: Text('Ya'),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop(false);
-                },
-                child: Text('Tidak'),
-              ),
-            ],
-          );
-        },
-      );
-
-      if (confirmDelete) {
-        var response = await http.delete(
-          Uri.parse(apiUrl),
-          headers: {'Content-Type': 'application/json'},
-        );
-
-        if (response.statusCode == 200) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Data komponen penilaian berhasil dihapus'),
-              duration: Duration(seconds: 2),
-            ),
-          );
-          return true;
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Gagal menghapus data komponen penilaian'),
-              duration: Duration(seconds: 2),
-            ),
-          );
-          return false;
-        }
-      } else {
-        return false;
-      }
-    } catch (error) {
-      print('Error: $error');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Terjadi kesalahan. Silakan coba lagi.'),
-          duration: Duration(seconds: 2),
-        ),
-      );
-      return false;
-    }
   }
 }

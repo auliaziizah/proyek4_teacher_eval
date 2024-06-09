@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('data_komponen', function (Blueprint $table) {
             $table->id();
             $table->string('nama_komponen');
+            $table->string('tipe_jawaban');
+            $table->boolean('kesimpulan');
             $table->timestamps();
         });
     }

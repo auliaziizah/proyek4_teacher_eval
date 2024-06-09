@@ -13,11 +13,10 @@ class CreateDatapenilaianTable extends Migration
      */
     public function up()
     {
-        Schema::create('datapenilaian', function (Blueprint $table) {
+        Schema::create('data_penilaian', function (Blueprint $table) {
             $table->id();
             $table->string('judul_penilaian');
             $table->timestamp('tgl_penilaian');
-            $table->string('image')->nullable();
             $table->timestamps();
         });
     }
@@ -29,6 +28,6 @@ class CreateDatapenilaianTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('datapenilaian');
+        Schema::dropIfExists('data_penilaian');
     }
 }

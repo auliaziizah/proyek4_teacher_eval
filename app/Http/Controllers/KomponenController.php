@@ -13,6 +13,17 @@ class KomponenController extends Controller
         return response()->json(['message' => 'Success', 'data' => $komponen]);
     }
 
+    public function read($id)
+    {
+        $komponen = Komponen::find($id);
+       
+        if (!$komponen) {
+            return response()->json(['message' => 'Penilaian not found'], 404);
+        }
+
+        return response()->json(['message' => 'Data berhasil ditemukan', 'data' => $komponen]);
+    }
+
     public function store(Request $request)
     {
         $input = $request->all();
