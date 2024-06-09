@@ -82,16 +82,6 @@ class AppBarBottomNavigator extends StatelessWidget {
         actions: <Widget>[
           IconButton(
             icon: Icon(
-              Icons.search,
-              color: const Color.fromARGB(255, 0, 0, 0),
-              semanticLabel: 'search',
-            ),
-            onPressed: () {
-              print('Search button');
-            },
-          ),
-          IconButton(
-            icon: Icon(
               Icons.account_circle,
               color: const Color.fromARGB(255, 0, 0, 0),
               semanticLabel: 'profile',

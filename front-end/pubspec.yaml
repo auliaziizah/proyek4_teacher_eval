@@ -33,4 +33,6 @@ flutter:
   assets:
     - assets/logo_sekolah.png
     - assets/hemster.jpg
-    - assets/diamond.png
+    - assets/sekolah.webp
+    - assets/profile.png
+    - assets/eduassess.jpeg

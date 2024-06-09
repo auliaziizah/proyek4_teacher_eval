@@ -61,7 +61,7 @@ class _KomponenPenilaianState extends State<KomponenPenilaian> {
                     child: ListTile(
                       title: Text(komponen['nama_komponen']),
                       subtitle: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           TextButton(
                             onPressed: () {

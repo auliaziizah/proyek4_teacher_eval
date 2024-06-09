@@ -26,6 +26,7 @@ Route::post('/logout', [AuthController::class, 'logout']);
 # Guru
 Route::get('/guru', [GuruController::class,'read_all']);
 Route::get('/guru/{id}', [GuruController::class,'read']);
+Route::get('/guru/read/{nip}', [GuruController::class,'read_nip']);
 Route::post('/guru/create', [GuruController::class,'store']);
 Route::put('/guru/update/{id}', [GuruController::class,'update']);
 Route::delete('/guru/delete/{id}', [GuruController::class, 'delete']);

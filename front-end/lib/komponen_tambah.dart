@@ -14,19 +14,13 @@ class TambahKomponen extends StatefulWidget {
 class _TambahKomponenState extends State<TambahKomponen> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _namaKomponenController = TextEditingController();
-  String? _selectedRadioValue1;
-  int? _selectedRadioValue2;
 
   @override
   void initState() {
     super.initState();
     if (widget.komponen == null) {
-      _selectedRadioValue1 = '';
-      _selectedRadioValue2 = 0;
     } else {
       _namaKomponenController.text = widget.komponen!['nama_komponen'];
-      _selectedRadioValue1 = widget.komponen!['tipe_jawaban'];
-      _selectedRadioValue2 = widget.komponen!['kesimpulan'];
     }
   }
 
@@ -57,70 +51,6 @@ class _TambahKomponenState extends State<TambahKomponen> {
                 },
               ),
               SizedBox(height: 20),
-              Text('Tipe Jawaban:'),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  RadioListTile<String>(
-                    title: const Text('Skor 1 - 5'),
-                    value: 'skor',
-                    groupValue: _selectedRadioValue1,
-                    onChanged: (String? value) {
-                      setState(() {
-                        _selectedRadioValue1 = value;
-                      });
-                    },
-                  ),
-                  RadioListTile<String>(
-                    title: Text('Nilai'),
-                    value: 'nilai',
-                    groupValue: _selectedRadioValue1,
-                    onChanged: (String? value) {
-                      setState(() {
-                        _selectedRadioValue1 = value;
-                      });
-                    },
-                  ),
-                  RadioListTile<String>(
-                    title: Text('Field Isian'),
-                    value: 'form',
-                    groupValue: _selectedRadioValue1,
-                    onChanged: (String? value) {
-                      setState(() {
-                        _selectedRadioValue1 = value;
-                      });
-                    },
-                  ),
-                ],
-              ),
-              SizedBox(height: 20),
-              Text('Apakah Terdapat Kesimpulan Penilaian?'),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  RadioListTile<int>(
-                    title: Text('Ya'),
-                    value: 1,
-                    groupValue: _selectedRadioValue2,
-                    onChanged: (int? value) {
-                      setState(() {
-                        _selectedRadioValue2 = value;
-                      });
-                    },
-                  ),
-                  RadioListTile<int>(
-                    title: Text('Tidak'),
-                    value: 2,
-                    groupValue: _selectedRadioValue2,
-                    onChanged: (int? value) {
-                      setState(() {
-                        _selectedRadioValue2 = value;
-                      });
-                    },
-                  ),
-                ],
-              ),
-              SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
@@ -139,8 +69,6 @@ class _TambahKomponenState extends State<TambahKomponen> {
   void _submitForm() async {
     Map<String, dynamic> komponenData = {
       'nama_komponen': _namaKomponenController.text,
-      'tipe_jawaban': _selectedRadioValue1,
-      'kesimpulan': _selectedRadioValue2,
     };
 
     String apiUrl;

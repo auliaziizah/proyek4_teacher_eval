@@ -52,8 +52,8 @@ class _KepsekHomePageState extends State<KepsekHomePage> {
   int _currentPage = 0;
 
   // Daftar gambar
-  List<String> _imageList = [
-    'assets/hemster.jpg',
+  final List<String> _imageList = [
+    'assets/sekolah.webp',
   ];
 
   @override
@@ -139,22 +139,43 @@ class _KepsekHomePageState extends State<KepsekHomePage> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 8.0),
-                Text("Daftar Penilaian"),
+                const SizedBox(height: 10.0),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/komponen_list');
-                      },
-                      child: Text('Kelola Komponen Penilaian'),
+                    Text(
+                      "Daftar Penilaian",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      ),
                     ),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/tambah_penilaian');
-                      },
-                      child: Text('Tambah Penilaian'),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.pushNamed(context, '/komponen_list');
+                          },
+                          child: Text('Kelola Komponen Penilaian'),
+                        ),
+                        SizedBox(width: 8),
+                        Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape
+                                .circle, // Membuat tombol menjadi lingkaran
+                            color: Color.fromARGB(
+                                255, 241, 211, 250), // Warna hijau
+                          ),
+                          child: IconButton(
+                            onPressed: () {
+                              Navigator.pushNamed(context, '/tambah_penilaian');
+                            },
+                            icon: Icon(Icons.add),
+                            color: Color.fromARGB(255, 52, 0, 80), // Warna ikon
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -176,8 +197,9 @@ class _KepsekHomePageState extends State<KepsekHomePage> {
                             margin: const EdgeInsets.symmetric(vertical: 8.0),
                             child: ListTile(
                               title: Text(penilaian.judulPenilaian),
-                              subtitle: Text(DateFormat('dd-MM-yyyy')
-                                  .format(penilaian.tglPenilaian)),
+                              subtitle: Text(
+                                'Dilakukan pada: ${DateFormat('dd-MM-yyyy').format(penilaian.tglPenilaian)}',
+                              ),
                               onTap: () {
                                 print(
                                     "ID Penilaian yang dikirim: ${penilaian.id}");

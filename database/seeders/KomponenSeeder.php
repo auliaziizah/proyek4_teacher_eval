@@ -15,22 +15,16 @@ class KomponenSeeder extends Seeder
         $dataKomponen = [
             [
                 'nama_komponen' => 'Penilaian Perangkat Pembelajaran',
-                'tipe_jawaban' => 'skor',
-                'kesimpulan' => false,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
                 'nama_komponen' => 'Pemantauan Perangkat Pembelajaran',
-                'tipe_jawaban' => 'nilai',
-                'kesimpulan' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
                 'nama_komponen' => 'Alat Penialain Kompetensi Guru',
-                'tipe_jawaban' => 'field',
-                'kesimpulan' => false,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],

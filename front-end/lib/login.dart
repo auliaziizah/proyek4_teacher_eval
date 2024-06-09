@@ -107,8 +107,8 @@ class _LoginPageState extends State<LoginPage> {
                   Column(
                     children: [
                       Image.asset(
-                        'assets/logo_sekolah.png',
-                        height: 100,
+                        'assets/eduassess.jpeg',
+                        height: 150,
                       ),
                       const SizedBox(height: 10.0),
                       const Text(
@@ -147,7 +147,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 obscureText: true,
               ),
-              const SizedBox(height: 15.0),
+              const SizedBox(height: 20.0),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,

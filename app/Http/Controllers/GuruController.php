@@ -24,6 +24,18 @@ class GuruController extends Controller
         return response()->json(['message' => 'Data berhasil ditemukan', 'data' => $guru]);
     }
 
+    public function read_nip($nip)
+{
+    $guru = Guru::where('nip', $nip)->first();
+
+    if (!$guru) {
+        return response()->json(['message' => 'Guru not found'], 404);
+    }
+
+    return response()->json(['message' => 'Data berhasil ditemukan', 'data' => $guru]);
+}
+
+
     public function store(Request $request)
     {
         $input = $request->all();

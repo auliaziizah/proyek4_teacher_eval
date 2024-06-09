@@ -8,5 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class Komponen extends Model
 {
     protected $table = 'data_komponen';
-    protected $fillable = ['nama_komponen', 'tipe_jawaban', 'kesimpulan'];
+    protected $fillable = ['nama_komponen'];
 }
