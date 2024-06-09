@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shrine/guru_detail.dart';
 import 'package:shrine/guru_update.dart';
-
 import 'appbar.dart';
 
 class TabelGuru extends StatefulWidget {
@@ -23,15 +22,19 @@ class _TabelGuruState extends State<TabelGuru> {
   }
 
   Future<List<Map<String, dynamic>>> getGuru() async {
-    final response =
-        await http.get(Uri.parse('http://127.0.0.1:8000/api/guru'));
+    try {
+      final response =
+          await http.get(Uri.parse('http://127.0.0.1:8000/api/guru'));
 
-    if (response.statusCode == 200) {
-      final List<dynamic> data = json.decode(response.body)['data'];
-      return List<Map<String, dynamic>>.from(
-          data.map((e) => Map<String, dynamic>.from(e)));
-    } else {
-      throw Exception('Failed to load data: ${response.statusCode}');
+      if (response.statusCode == 200) {
+        final List<dynamic> data = json.decode(response.body)['data'];
+        return List<Map<String, dynamic>>.from(
+            data.map((e) => Map<String, dynamic>.from(e)));
+      } else {
+        throw Exception('Failed to load data: ${response.statusCode}');
+      }
+    } catch (error) {
+      throw Exception('Failed to load data: $error');
     }
   }
 
@@ -56,7 +59,7 @@ class _TabelGuruState extends State<TabelGuru> {
                   return CircularProgressIndicator();
                 } else if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}');
-                } else if (snapshot.hasData) {
+                } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
                   return _buildDataTable(snapshot.data!);
                 } else {
                   return Text('No Data');
@@ -87,8 +90,8 @@ class _TabelGuruState extends State<TabelGuru> {
         Map<String, dynamic> item = entry.value;
         return DataRow(cells: [
           DataCell(Text('$index')), // Nomor
-          DataCell(Text(item['nip'].toString())),
-          DataCell(Text(item['nama'].toString())),
+          DataCell(Text(item['nip'] ?? '')), // Periksa null sebelum mengakses
+          DataCell(Text(item['nama'] ?? '')), // Periksa null sebelum mengakses
           DataCell(
             Row(
               children: [
@@ -98,7 +101,7 @@ class _TabelGuruState extends State<TabelGuru> {
                       context,
                       MaterialPageRoute(
                           builder: (context) => DetailGuru(
-                                id: item['id'],
+                                id: item['id'].toString(),
                               )),
                     );
                   },
@@ -118,13 +121,11 @@ class _TabelGuruState extends State<TabelGuru> {
                 ),
                 IconButton(
                   onPressed: () async {
-                    final success = await _deleteGuru(item['id'].toString());
-                    if (success) {
-                      setState(() {
-                        // Memperbarui tabel data setelah menghapus
-                        _guruFuture = getGuru();
-                      });
-                    }
+                    await _deleteGuru(item['id'].toString());
+                    setState(() {
+                      // Refresh data after deletion
+                      _guruFuture = getGuru();
+                    });
                   },
                   icon: Icon(Icons.delete),
                 ),
@@ -136,12 +137,9 @@ class _TabelGuruState extends State<TabelGuru> {
     );
   }
 
-  Future<bool> _deleteGuru(String id) async {
-    // URL endpoint API untuk menghapus data guru
-    String apiUrl = 'http://127.0.0.1:8000/api/guru/delete/$id';
-
+  Future<void> _deleteGuru(String id) async {
     try {
-      // Menampilkan dialog konfirmasi
+      // Show confirmation dialog
       bool confirmDelete = await showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -151,13 +149,13 @@ class _TabelGuruState extends State<TabelGuru> {
             actions: <Widget>[
               TextButton(
                 onPressed: () {
-                  Navigator.of(context).pop(true); // Konfirmasi hapus
+                  Navigator.of(context).pop(true); // Confirm delete
                 },
                 child: Text('Ya'),
               ),
               TextButton(
                 onPressed: () {
-                  Navigator.of(context).pop(false); // Batal hapus
+                  Navigator.of(context).pop(false); // Cancel delete
                 },
                 child: Text('Tidak'),
               ),
@@ -166,40 +164,26 @@ class _TabelGuruState extends State<TabelGuru> {
         },
       );
 
-      // Jika pengguna mengonfirmasi untuk menghapus
       if (confirmDelete) {
-        // Kirim permintaan DELETE ke server
-        var response = await http.delete(
+        // Send DELETE request to server
+        final apiUrl = 'http://127.0.0.1:8000/api/guru/delete/$id';
+        final response = await http.delete(
           Uri.parse(apiUrl),
           headers: {'Content-Type': 'application/json'},
         );
 
-        // Cek status kode respon
         if (response.statusCode == 200) {
-          // Data berhasil dihapus
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('Data guru berhasil dihapus'),
               duration: Duration(seconds: 2),
             ),
           );
-          return true;
         } else {
-          // Gagal menghapus data guru
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Gagal menghapus data guru'),
-              duration: Duration(seconds: 2),
-            ),
-          );
-          return false;
+          throw Exception('Failed to delete guru data');
         }
-      } else {
-        // Jika pengguna membatalkan hapus
-        return false;
       }
     } catch (error) {
-      // Tangani kesalahan jika terjadi
       print('Error: $error');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -207,7 +191,6 @@ class _TabelGuruState extends State<TabelGuru> {
           duration: Duration(seconds: 2),
         ),
       );
-      return false;
     }
   }
 }

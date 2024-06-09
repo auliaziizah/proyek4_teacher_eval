@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class DetailGuru extends StatefulWidget {
-  final int id;
+  final String id;
   DetailGuru({required this.id});
 
   @override
@@ -11,7 +11,7 @@ class DetailGuru extends StatefulWidget {
 }
 
 class _DetailGuruState extends State<DetailGuru> {
-  late Map<String, dynamic> guruData;
+  Map<String, dynamic>? guruData;
 
   @override
   void initState() {
@@ -20,14 +20,18 @@ class _DetailGuruState extends State<DetailGuru> {
   }
 
   Future<void> fetchData() async {
-    var response = await http
-        .get(Uri.parse('http://127.0.0.1:8000/api/guru/${widget.id}'));
-    if (response.statusCode == 200) {
-      setState(() {
-        guruData = json.decode(response.body);
-      });
-    } else {
-      throw Exception('Failed to load data');
+    try {
+      var response = await http
+          .get(Uri.parse('http://127.0.0.1:8000/api/guru/${widget.id}'));
+      if (response.statusCode == 200 && mounted) {
+        setState(() {
+          guruData = json.decode(response.body)['data'];
+        });
+      } else {
+        throw Exception('Failed to load data');
+      }
+    } catch (e) {
+      print('Error fetching data: $e');
     }
   }
 
@@ -37,15 +41,15 @@ class _DetailGuruState extends State<DetailGuru> {
       appBar: AppBar(title: Text("Detail Guru")),
       body: guruData == null
           ? Center(child: CircularProgressIndicator())
-          : ListView(
-              padding: EdgeInsets.all(16.0),
+          : Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildDetailItem('Nama:', guruData['nama']),
-                _buildDetailItem('NIP:', guruData['nip']),
-                _buildDetailItem('Pangkat:', guruData['pangkat']),
-                _buildDetailItem('Golongan:', guruData['golongan']),
-                _buildDetailItem('Email:', guruData['email']),
-                _buildDetailItem('Password:', guruData['password']),
+                _buildDetailItem('NIP', guruData?['nip'] ?? 'N/A'),
+                _buildDetailItem('Nama', guruData?['nama'] ?? 'N/A'),
+                _buildDetailItem('Golongan', guruData?['golongan'] ?? 'N/A'),
+                _buildDetailItem('Pangkat', guruData?['pangkat'] ?? 'N/A'),
+                _buildDetailItem('Email', guruData?['email'] ?? 'N/A'),
+                _buildDetailItem('Password', guruData?['password'] ?? 'N/A'),
               ],
             ),
     );
@@ -64,7 +68,7 @@ class _DetailGuruState extends State<DetailGuru> {
           SizedBox(width: 8.0),
           Expanded(
             child: Text(
-              value,
+              value, // Tidak perlu menggunakan operator null-aware disini karena sudah ada nilai default 'N/A'
               textAlign: TextAlign.start,
             ),
           ),
