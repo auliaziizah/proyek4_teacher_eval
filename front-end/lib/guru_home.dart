@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'appbar.dart';
-import 'penilaian_list_guru.dart';
+import 'pengumpulan_tabel.dart';
 
 class Penilaian {
   final int id;
@@ -40,7 +40,7 @@ class PenilaianService {
 }
 
 class GuruHomePage extends StatefulWidget {
-  const GuruHomePage ({Key? key}) : super(key: key);
+  const GuruHomePage({Key? key}) : super(key: key);
 
   @override
   _KepsekHomePageState createState() => _KepsekHomePageState();
@@ -85,21 +85,22 @@ class _KepsekHomePageState extends State<GuruHomePage> {
                             _currentPage = page;
                           });
                         },
-                        itemCount: _imageList
-                            .length, // Menggunakan panjang daftar gambar
+                        itemCount: _imageList.length,
                         itemBuilder: (context, index) {
-                          return Container(
-                            margin: const EdgeInsets.all(8.0),
-                            decoration: BoxDecoration(
-                              color: Colors.grey.withOpacity(0.3),
-                              borderRadius: BorderRadius.circular(8.0),
-                            ),
-                            child: Center(
-                              child: Image.asset(
-                                _imageList[index],
-                                fit: BoxFit.cover,
-                                width: double.infinity,
-                                height: double.infinity,
+                          return GestureDetector(
+                            child: Container(
+                              margin: const EdgeInsets.all(8.0),
+                              decoration: BoxDecoration(
+                                color: Colors.grey.withOpacity(0.3),
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                              child: Center(
+                                child: Image.asset(
+                                  _imageList[index],
+                                  fit: BoxFit.cover,
+                                  width: double.infinity,
+                                  height: double.infinity,
+                                ),
                               ),
                             ),
                           );
@@ -111,27 +112,16 @@ class _KepsekHomePageState extends State<GuruHomePage> {
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: List.generate(
-                          _imageList
-                              .length, // Menggunakan panjang daftar gambar
-                          (index) => GestureDetector(
-                            onTap: () {
-                              _pageController.animateToPage(
-                                index,
-                                duration: const Duration(seconds: 500),
-                                curve: Curves.easeInOut,
-                              );
-                            },
-                            child: Container(
-                              width: 8.0,
-                              height: 8.0,
-                              margin:
-                                  const EdgeInsets.symmetric(horizontal: 4.0),
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: _currentPage == index
-                                    ? Colors.blue
-                                    : Colors.grey,
-                              ),
+                          _imageList.length,
+                          (index) => Container(
+                            width: 8.0,
+                            height: 8.0,
+                            margin: const EdgeInsets.symmetric(horizontal: 4.0),
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: _currentPage == index
+                                  ? Colors.blue
+                                  : Colors.grey,
                             ),
                           ),
                         ),
@@ -160,13 +150,10 @@ class _KepsekHomePageState extends State<GuruHomePage> {
                               subtitle: Text(DateFormat('dd-MM-yyyy')
                                   .format(penilaian.tglPenilaian)),
                               onTap: () {
-                                print(
-                                    "ID Penilaian yang dikirim: ${penilaian.id}");
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) =>
-                                        DaftarGuru(idPenilaian: penilaian.id),
+                                    builder: (context) => TabelPengumpulan(),
                                   ),
                                 );
                               },

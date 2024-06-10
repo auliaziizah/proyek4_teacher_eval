@@ -50,7 +50,7 @@ class _TabelPengumpulanState extends State<TabelPengumpulan> {
               } else if (snapshot.hasError) {
                 return Text('Error: ${snapshot.error}');
               } else if (snapshot.hasData) {
-                return _buildDataTable(snapshot.data!);
+                return _buildListView(snapshot.data!);
               } else {
                 return Text('No Data');
               }
@@ -76,26 +76,18 @@ class _TabelPengumpulanState extends State<TabelPengumpulan> {
     );
   }
 
-  Widget _buildDataTable(List<Map<String, dynamic>> data) {
-    return DataTable(
-      headingTextStyle:
-          TextStyle(fontWeight: FontWeight.bold, color: Colors.blue),
-      dataRowHeight: 60,
-      columns: [
-        DataColumn(label: Text('No')),
-        DataColumn(label: Text('File Name')),
-        DataColumn(label: Text('File Path')),
-        DataColumn(label: Text('Aksi')),
-      ],
-      rows: data.asMap().entries.map((entry) {
-        int index = entry.key + 1; // Nomor dimulai dari 1
-        Map<String, dynamic> item = entry.value;
-        return DataRow(cells: [
-          DataCell(Text('$index')), // Nomor
-          DataCell(Text(item['file_name'].toString())),
-          DataCell(Text(item['file_path'].toString())),
-          DataCell(
-            Row(
+  Widget _buildListView(List<Map<String, dynamic>> data) {
+    return ListView.builder(
+      itemCount: data.length,
+      itemBuilder: (context, index) {
+        Map<String, dynamic> item = data[index];
+        return Card(
+          margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+          child: ListTile(
+            title: Text(item['file_name'].toString()),
+            subtitle: Text(item['file_path'].toString()),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 IconButton(
                   onPressed: () {
@@ -126,8 +118,8 @@ class _TabelPengumpulanState extends State<TabelPengumpulan> {
               ],
             ),
           ),
-        ]);
-      }).toList(),
+        );
+      },
     );
   }
 

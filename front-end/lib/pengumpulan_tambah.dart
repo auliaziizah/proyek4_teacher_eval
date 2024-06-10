@@ -3,7 +3,8 @@ import 'package:file_picker/file_picker.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:http/http.dart' as http;
 import 'pengumpulan_tabel.dart';
-
+import 'dart:typed_data';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class TambahPengumpulan extends StatefulWidget {
   @override
@@ -33,20 +34,44 @@ class _TambahPengumpulanState extends State<TambahPengumpulan> {
     if (selectedFiles[0] != null) {
       var request = http.MultipartRequest(
         'POST',
-        Uri.parse('http://127.0.0.1:8000/api/pengumpulan'),
+        Uri.parse('http://127.0.0.1:8000/api/pengumpulan/create'),
       );
-      request.files.add(
-        await http.MultipartFile.fromPath(
-          'file',
-          selectedFiles[0]!.path!,
-          filename: selectedFiles[0]!.name,
-        ),
-      );
+
+      request.fields['id_guru'] = '1'; // Ganti dengan nilai id_guru yang sesuai
+
+      if (kIsWeb) {
+        Uint8List? fileBytes = selectedFiles[0]!.bytes;
+        if (fileBytes != null) {
+          request.files.add(http.MultipartFile.fromBytes(
+            'file',
+            fileBytes,
+            filename: selectedFiles[0]!.name,
+          ));
+        } else {
+          _showSnackBar('Error getting file bytes.');
+          return;
+        }
+      } else {
+        request.files.add(
+          await http.MultipartFile.fromPath(
+            'file',
+            selectedFiles[0]!.path!,
+            filename: selectedFiles[0]!.name,
+          ),
+        );
+      }
+
       var res = await request.send();
       if (res.statusCode == 200) {
         _showSnackBar('File ${fileNames[0]} uploaded successfully.');
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => TabelPengumpulan()),
+        );
       } else {
         _showSnackBar('File ${fileNames[0]} upload failed.');
+        print('Response Status: ${res.statusCode}');
+        print('Response Body: ${await res.stream.bytesToString()}');
       }
     } else {
       _showSnackBar('No file selected.');

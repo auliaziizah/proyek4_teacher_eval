@@ -14,11 +14,12 @@ class CreateDataPengumpulanTable extends Migration
     public function up()
     {
         Schema::create('data_pengumpulan', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
+            $table->unsignedBigInteger('id_guru');
             $table->string('file_name');
             $table->string('file_path');
-            $table->unsignedBigInteger('id_guru');
-            $table->timestamps(); // Menambahkan kolom created_at dan updated_at
+            $table->timestamps();
+        
             $table->foreign('id_guru')->references('id')->on('gurus')->onDelete('cascade');
         });
     }
