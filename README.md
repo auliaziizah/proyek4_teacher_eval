@@ -2,7 +2,7 @@
 1. Aulia Aziizah Fauziyyah - 221511004
 2. Jonanda Pantas Agitha Brahmana - 221511015
 3. Paulina Lestari Simatupang - 221511026
-=======
+
 # Deskripsi Aplikasi
 Aplikasi EduAssess merupakan aplikasi yang dapat membantu kepala sekolah dalam mengelola proses penilaian kinerja guru yang dilakukan secara digital. Aplikasi ini dibangun dengan menggunakan teknologi Flutter, sebuah framework pengembangan aplikasi mobile yang memungkinkan pengembangan aplikasi secara cepat dan multi-platform agar pengguna bisa mengakses diperangkat atau lingkungan tanpa terbatas pada platform tertentu. Dengan hadirnya aplikasi EduAsses, diharapkan kepala sekolah dan pihak terkait dapat dengan mudah melakukan evaluasi kinerja guru secara terstruktur, transparan, dan efisien. Aplikasi ini juga memungkinkan untuk mendokumentasikan hasil evaluasi, memberikan umpan balik kepada guru, serta merancang rencana pengembangan profesional berdasarkan hasil evaluasi yang didapatkan.
 
@@ -51,4 +51,3 @@ Flutter, misalnya C:\src\flutter\bin.
    b. nip = '221511015' dengan password = 'jonanda123'
    c. nip = '221511026' dengan password = 'paulina123'
 4. Jika ingin menambahkan akses untuk guru lainnya dapat dengan masuk terlebih dahulu sebagai kepala sekolah dan tambah data guru. Maka guru tersebut otomatis mendapatkan akses kepada aplikasi karena proses registrasi guru hanya dapat dilakukan oleh kepala sekolah
->>>>>>> 131c96d08f270fbbfd88c5a1c05c35d96b530870
