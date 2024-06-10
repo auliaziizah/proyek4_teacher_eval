@@ -169,6 +169,8 @@ class _PertanyaanFormState extends State<PertanyaanForm> {
                         subtitle: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
+                            Text(
+                                'Keterangan : 1  :  Sangat Tidak Baik  2 : Tidak Baik  3 : Kurang Baik 4: Baik  5 : Baik Sekali'),
                             Text('Jawaban (1-5):'),
                             Row(
                               children: List.generate(5, (int i) {

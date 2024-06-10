@@ -60,7 +60,7 @@ class _TabelGuruState extends State<TabelGuru> {
                 } else if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}');
                 } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
-                  return _buildDataTable(snapshot.data!);
+                  return _buildCardList(snapshot.data!);
                 } else {
                   return Text('No Data');
                 }
@@ -72,28 +72,24 @@ class _TabelGuruState extends State<TabelGuru> {
     );
   }
 
-  Widget _buildDataTable(List<Map<String, dynamic>> data) {
+  Widget _buildCardList(List<Map<String, dynamic>> data) {
     // Filter out data with NIP "1234567"
     data = data.where((item) => item['nip'] != '1234567').toList();
 
-    return DataTable(
-      headingTextStyle: TextStyle(fontWeight: FontWeight.bold),
-      dataRowHeight: 60,
-      columns: [
-        DataColumn(label: Text('No')),
-        DataColumn(label: Text('NIP')),
-        DataColumn(label: Text('Nama')),
-        DataColumn(label: Text('Aksi')),
-      ],
-      rows: data.asMap().entries.map((entry) {
-        int index = entry.key + 1; // Nomor dimulai dari 1
-        Map<String, dynamic> item = entry.value;
-        return DataRow(cells: [
-          DataCell(Text('$index')), // Nomor
-          DataCell(Text(item['nip'] ?? '')), // Periksa null sebelum mengakses
-          DataCell(Text(item['nama'] ?? '')), // Periksa null sebelum mengakses
-          DataCell(
-            Row(
+    return ListView.builder(
+      padding: EdgeInsets.all(10.0),
+      itemCount: data.length,
+      itemBuilder: (context, index) {
+        Map<String, dynamic> item = data[index];
+        return Card(
+          margin: EdgeInsets.symmetric(vertical: 10.0),
+          child: ListTile(
+            contentPadding: EdgeInsets.all(10.0),
+            leading: Image.asset('assets/profile.png', width: 50, height: 50),
+            title: Text(item['nama'] ?? ''),
+            subtitle: Text('NIP: ${item['nip'] ?? ''}'),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 IconButton(
                   onPressed: () {
@@ -113,7 +109,7 @@ class _TabelGuruState extends State<TabelGuru> {
                       context,
                       MaterialPageRoute(
                           builder: (context) => UpdateGuru(
-                                guru: data[index - 1],
+                                guru: data[index],
                               )),
                     );
                   },
@@ -132,8 +128,8 @@ class _TabelGuruState extends State<TabelGuru> {
               ],
             ),
           ),
-        ]);
-      }).toList(),
+        );
+      },
     );
   }
 

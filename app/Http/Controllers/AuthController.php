@@ -33,7 +33,7 @@ class AuthController extends Controller
                     'logged_in' => true,
                     'role' => $role 
                 ]);
-                return response()->json(['token' => 'example_token', 'role' => $role, 'message' => 'Login successful'], 200);
+                return response()->json(['token' => 'login', 'role' => $role, 'message' => 'Login successful'], 200);
             } else {
                 return response()->json(['message' => 'Wrong Password'], 401);
             }

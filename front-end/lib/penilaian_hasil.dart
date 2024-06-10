@@ -127,21 +127,26 @@ class _HasilPenilaianState extends State<HasilPenilaian> {
                         }
                       },
                     )),
-                    DataCell(FutureBuilder<Map<String, dynamic>>(
-                      future: getJawabanDanSkor(idPertanyaan),
-                      builder: (context, jawabanSnapshot) {
-                        if (jawabanSnapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return CircularProgressIndicator();
-                        } else if (jawabanSnapshot.hasError) {
-                          return Text('Error');
-                        } else {
-                          final jawabanData = jawabanSnapshot.data;
-                          return Text(
-                              jawabanData?['ketersediaan'].toString() ?? 'N/A');
-                        }
-                      },
-                    )),
+                    DataCell(
+                      FutureBuilder<Map<String, dynamic>>(
+                        future: getJawabanDanSkor(idPertanyaan),
+                        builder: (context, jawabanSnapshot) {
+                          if (jawabanSnapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return CircularProgressIndicator();
+                          } else if (jawabanSnapshot.hasError) {
+                            return Text('Error');
+                          } else {
+                            final jawabanData = jawabanSnapshot.data;
+                            final ketersediaan = jawabanData?['ketersediaan'];
+                            final ketersediaanText = ketersediaan == 1
+                                ? 'ada'
+                                : (ketersediaan == 0 ? 'tidak ada' : 'N/A');
+                            return Text(ketersediaanText);
+                          }
+                        },
+                      ),
+                    ),
                     DataCell(FutureBuilder<Map<String, dynamic>>(
                       future: getJawabanDanSkor(idPertanyaan),
                       builder: (context, jawabanSnapshot) {

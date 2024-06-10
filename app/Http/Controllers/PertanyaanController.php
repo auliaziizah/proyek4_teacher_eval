@@ -36,7 +36,7 @@ class PertanyaanController extends Controller
         $pertanyaan = Pertanyaan::find($id);
 
         if (!$pertanyaan) {
-            return response()->json(['message' => 'Guru not found'], 404);
+            return response()->json(['message' => 'Pertanyaan not found'], 404);
         }
 
         return response()->json(['message' => 'Data berhasil ditemukan', 'data' => $pertanyaan]);
